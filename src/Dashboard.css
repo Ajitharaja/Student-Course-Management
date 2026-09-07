@@ -1,0 +1,47 @@
+.dashboard-page {
+  padding: 2rem;
+}
+
+.stats {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin: 1.5rem 0;
+}
+
+.stat-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  min-width: 140px;
+  flex: 1;
+}
+
+.stat-card h3 {
+  font-size: 2rem;
+  color: #4a6cf7;
+}
+
+.course-item {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1rem;
+}
+
+.progress-bar {
+  background: #eee;
+  border-radius: 20px;
+  height: 10px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+.progress-fill {
+  background: #4a6cf7;
+  height: 100%;
+  border-radius: 20px;
+}
