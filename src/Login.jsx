@@ -1,9 +1,11 @@
 import { useState } from "react";
-import "./Auth.css";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthContext";
+import "./Auth.css";
 
-function Login({ onLoginSuccess }) {
-   const navigate = useNavigate();
+function Login() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
 
@@ -13,34 +15,31 @@ function Login({ onLoginSuccess }) {
   }
 
   function validate() {
-  const newErrors = {};
-
-  if (!formData.email.trim()) {
-    newErrors.email = "Email is required";
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-    newErrors.email = "Enter a valid email address";
+    const newErrors = {};
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Enter a valid email address";
+    }
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+    }
+    return newErrors;
   }
 
-  if (!formData.password) {
-    newErrors.password = "Password is required";
-  } else if (formData.password.length < 6) {
-    newErrors.password = "Password must be at least 6 characters";
+  function handleSubmit(e) {
+    e.preventDefault();
+    const newErrors = validate();
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      console.log("Form is valid, submitting:", formData);
+      login({ email: formData.email });
+      navigate("/dashboard");
+    }
   }
-
-  return newErrors;
-}
-
-function handleSubmit(e) {
-  e.preventDefault();
-  const newErrors = validate();
-  setErrors(newErrors);
-
-  if (Object.keys(newErrors).length === 0) {
-    console.log("Form is valid, submitting:", formData);
-     onLoginSuccess();
-     navigate("/dashboard");
-  }
-}
 
   return (
     <div className="page auth-page">
@@ -55,7 +54,8 @@ function handleSubmit(e) {
           value={formData.email}
           onChange={handleChange}
         />
-    {errors.email && <span className="error-text">{errors.email}</span>}
+        {errors.email && <span className="error-text">{errors.email}</span>}
+
         <label htmlFor="password">Password</label>
         <input
           type="password"
@@ -64,7 +64,8 @@ function handleSubmit(e) {
           value={formData.password}
           onChange={handleChange}
         />
-   {errors.password && <span className="error-text">{errors.password}</span>}
+        {errors.password && <span className="error-text">{errors.password}</span>}
+
         <button type="submit">Login</button>
 
         <p className="auth-switch">

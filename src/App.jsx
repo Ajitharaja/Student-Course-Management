@@ -4,10 +4,11 @@ import Login from "./Login";
 import Register from "./Register";
 import Dashboard from "./Dashboard";
 import { useState } from "react";
+import { useAuth } from "./AuthContext";
 import "./App.css";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn, logout } = useAuth();
 
   return (
     <BrowserRouter>
@@ -17,7 +18,7 @@ function App() {
         {!isLoggedIn && <Link to="/register">Register</Link>}
         {isLoggedIn && <Link to="/dashboard">Dashboard</Link>}
         {isLoggedIn && (
-          <button className="logout-btn" onClick={() => setIsLoggedIn(false)}>
+          <button className="logout-btn" onClick={logout}>
             Logout
           </button>
         )}
@@ -25,10 +26,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route
-          path="/login"
-          element={<Login onLoginSuccess={() => setIsLoggedIn(true)} />}
-        />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
