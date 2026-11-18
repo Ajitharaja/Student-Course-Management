@@ -1,11 +1,14 @@
-﻿# Frontend
-FullStack-Project/node_modules/
+# Dependencies (matches at every level)
+node_modules/
+
+# Frontend build
 FullStack-Project/dist/
 
-# Backend
+# Backend build and IDE files
 backend/target/
 backend/.idea/
 backend/*.iml
+.idea/
 
 # General
 .DS_Store
