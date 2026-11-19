@@ -2,9 +2,9 @@ package com.scms.backend.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 
 @Entity
 @Table(name = "courses")
@@ -23,9 +23,12 @@ public class Course {
     @NotBlank(message = "Instructor is required")
     private String instructor;
 
-    private int duration; // in weeks
+    private int duration;
 
     private String description;
 
     private String category;
+
+    @Column(columnDefinition = "integer default 6")
+    private Integer totalModules = 6;
 }

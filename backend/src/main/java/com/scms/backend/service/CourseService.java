@@ -33,6 +33,9 @@ public class CourseService {
         course.setDuration(updatedCourse.getDuration());
         course.setDescription(updatedCourse.getDescription());
         course.setCategory(updatedCourse.getCategory());
+        if (updatedCourse.getTotalModules() != null) {
+            course.setTotalModules(updatedCourse.getTotalModules());
+        }
         return courseRepository.save(course);
     }
 
