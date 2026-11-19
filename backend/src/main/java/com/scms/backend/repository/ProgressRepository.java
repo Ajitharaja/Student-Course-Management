@@ -5,8 +5,10 @@ import com.scms.backend.model.Progress;
 import com.scms.backend.model.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ProgressRepository extends JpaRepository<Progress, Long> {
     Optional<Progress> findByStudentAndCourse(Student student, Course course);
+    List<Progress> findByStudent(Student student);
 }
