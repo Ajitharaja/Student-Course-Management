@@ -1,7 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Auth.css";
 
+const API_URL = "http://localhost:8080/api/students";
+
+
 function Register() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -10,6 +15,8 @@ function Register() {
     confirmPassword: "",
   });
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -48,14 +55,39 @@ function Register() {
     return newErrors;
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const newErrors = validate();
     setErrors(newErrors);
+    setServerError("");
 
-    if (Object.keys(newErrors).length === 0) {
-      console.log("Register form valid, submitting:", formData);
-      // API call will go here once backend exists
+    if (Object.keys(newErrors).length > 0) return;
+
+    setLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          department: formData.department,
+          password: formData.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setServerError(data.error || "Registration failed");
+        return;
+      }
+
+      navigate("/login");
+    } catch (err) {
+      setServerError("Cannot reach the server. Is the backend running?");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -116,7 +148,11 @@ function Register() {
           <span className="error-text">{errors.confirmPassword}</span>
         )}
 
-        <button type="submit">Register</button>
+        {serverError && <span className="error-text">{serverError}</span>}
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Registering..." : "Register"}
+        </button>
 
         <p className="auth-switch">
           Already have an account? <a href="/login">Login</a>

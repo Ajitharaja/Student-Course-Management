@@ -3,7 +3,7 @@ import Home from "./Home";
 import Login from "./Login";
 import Register from "./Register";
 import Dashboard from "./Dashboard";
-import { useState } from "react";
+import ProtectedRoute from "./ProtectedRoute";
 import { useAuth } from "./AuthContext";
 import "./App.css";
 
@@ -28,7 +28,14 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

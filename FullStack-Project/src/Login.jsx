@@ -3,11 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 import "./Auth.css";
 
+const API_URL = "http://localhost:8080/api/students";
+
 function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -29,15 +33,38 @@ function Login() {
     return newErrors;
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const newErrors = validate();
     setErrors(newErrors);
+    setServerError("");
 
-    if (Object.keys(newErrors).length === 0) {
-      console.log("Form is valid, submitting:", formData);
-      login({ email: formData.email });
+    if (Object.keys(newErrors).length > 0) return;
+
+    setLoading(true);
+    try {
+      const response = await fetch(`${API_URL}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setServerError(data.error || "Login failed");
+        return;
+      }
+
+      login(data);
       navigate("/dashboard");
+    } catch (err) {
+      setServerError("Cannot reach the server. Is the backend running?");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -66,7 +93,11 @@ function Login() {
         />
         {errors.password && <span className="error-text">{errors.password}</span>}
 
-        <button type="submit">Login</button>
+        {serverError && <span className="error-text">{serverError}</span>}
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
 
         <p className="auth-switch">
           Don't have an account? <a href="/register">Register</a>
