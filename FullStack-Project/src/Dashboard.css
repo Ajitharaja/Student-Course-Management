@@ -45,3 +45,35 @@
   height: 100%;
   border-radius: 20px;
 }
+
+.course-actions {
+  margin-top: 0.75rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  background-color: #4a6cf7;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #3a5ce0;
+}
+
+.done-text {
+  color: #2a9d5c;
+  font-weight: 500;
+}
+
+.info-text {
+  color: #4a6cf7;
+  margin: 0.5rem 0;
+}
+
+.dashboard-page h2 {
+  margin: 1.5rem 0 0.75rem;
+}
