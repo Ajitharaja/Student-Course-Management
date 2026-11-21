@@ -4,6 +4,7 @@ import Login from "./Login";
 import Register from "./Register";
 import Dashboard from "./Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
+import NotificationCenter from "./NotificationCenter";
 import { useAuth } from "./AuthContext";
 import "./App.css";
 
@@ -23,6 +24,8 @@ function App() {
           </button>
         )}
       </nav>
+
+      <NotificationCenter />
 
       <Routes>
         <Route path="/" element={<Home />} />

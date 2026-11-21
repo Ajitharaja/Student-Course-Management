@@ -13,8 +13,16 @@ public class CourseService {
     @Autowired
     private CourseRepository courseRepository;
 
+    @Autowired
+    private NotificationService notificationService;
+
     public Course addCourse(Course course) {
-        return courseRepository.save(course);
+        Course saved = courseRepository.save(course);
+        notificationService.broadcast(
+                "NEW_COURSE",
+                "New course added: " + saved.getCourseName()
+        );
+        return saved;
     }
 
     public List<Course> getAllCourses() {

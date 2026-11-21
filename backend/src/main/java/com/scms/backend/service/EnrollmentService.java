@@ -30,6 +30,9 @@ public class EnrollmentService {
     @Autowired
     private CourseRepository courseRepository;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @Transactional
     public Enrollment enroll(String email, Long courseId) {
         Student student = studentRepository.findByEmail(email)
@@ -54,6 +57,12 @@ public class EnrollmentService {
         progress.setCompletedModules(0);
         progress.setProgressPercentage(0.0);
         progressRepository.save(progress);
+
+        notificationService.sendToUser(
+                email,
+                "ENROLLMENT",
+                "You are enrolled in " + course.getCourseName()
+        );
 
         return saved;
     }

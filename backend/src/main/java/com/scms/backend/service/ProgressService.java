@@ -24,6 +24,9 @@ public class ProgressService {
     @Autowired
     private CourseRepository courseRepository;
 
+    @Autowired
+    private NotificationService notificationService;
+
     public List<Progress> getMyProgress(String email) {
         Student student = studentRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
@@ -51,6 +54,17 @@ public class ProgressService {
         progress.setCompletedModules(done);
         progress.setProgressPercentage(Math.round(done * 100.0 / total * 10) / 10.0);
 
-        return progressRepository.save(progress);
+        Progress saved = progressRepository.save(progress);
+
+        if (done == total) {
+            notificationService.sendToUser(
+                    email,
+                    "COMPLETED",
+                    "Congratulations! You completed " + course.getCourseName()
+                            + ". Your certificate is ready."
+            );
+        }
+
+        return saved;
     }
 }
